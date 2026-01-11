@@ -253,6 +253,13 @@ At the end of this setup, you will have:
 - **Grounded AI inference** via Prompt Flow
 - **Governed public exposure** through API Management
 
+## 💰 Cost Optimization & Governance
+
+This architecture is designed to minimize LLM token consumption and infrastructure overhead through three specific layers:
+
+1. **Strict Grounding (Prompt Level):** By implementing a "reject-fast" logic in the Jinja2 templates, queries that do not align with the retrieved documents are terminated early. This prevents the LLM from generating costly, out-of-scope "hallucinations."
+2. **Semantic Caching (APIM Level):** Azure API Management is configured to cache frequent search queries. Repeat questions are served directly from the cache, resulting in **zero LLM token costs** and sub-millisecond response times for common user queries.
+3. **Token Rate Limiting:** Managed via APIM policies to prevent "denial-of-wallet" attacks or automated abuse, ensuring the project stays within its monthly Azure credit allocation.
 ---
 
 ## 📎 References
