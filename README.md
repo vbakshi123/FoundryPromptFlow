@@ -77,7 +77,7 @@ The AI backbone is built on the **Microsoft Foundry** ecosystem.
 - Link it to the AI Hub
 
 ### Model Deployment
-Using the [Azure AI Foundry Portal](https://ai.azure.com), deploy:
+Using the [Azure AI Foundry Portal](https://ai.azure.com), deploy using the below **model names**:
 
 | Capability        | Model Name |
 |------------------|-----------|
