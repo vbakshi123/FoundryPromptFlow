@@ -37,7 +37,7 @@ nodes:
     type: code
     path: LLM_Node.jinja2
   inputs:
-    deployment_name: XXX-gpt4o-model
+    deployment_name: gpt4o
     temperature: 0.3
     top_p: 1
     max_tokens: 1000
@@ -45,7 +45,7 @@ nodes:
     context: ${search_docs.output.context}
     question: ${inputs.question}
   provider: AzureOpenAI
-  connection: XXX-ai-hub-foundry-resource_aoai
+  connection: azure-ai-foundry_aoai
   api: chat
   module: promptflow.tools.aoai
   activate:
