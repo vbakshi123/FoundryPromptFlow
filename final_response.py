@@ -8,6 +8,6 @@ def run(has_context: bool, llm_output: str):
     Otherwise, it returns the LLM's generated response.
     """
     if not has_context:
-        return "I can only answer questions related to Switch Pet Insurance."
+        return "I can only answer questions related to XXXX."
     
     return llm_output
