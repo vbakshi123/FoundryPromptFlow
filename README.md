@@ -1,3 +1,29 @@
+mermaid
+sequenceDiagram
+    participant User as Public Website User
+    participant APIM as Azure API Management
+    participant PF as Prompt Flow Endpoint
+    participant Search as Azure AI Search (Foundry IQ)
+    participant LLM as GPT-4o Model
+
+    User->>APIM: POST /chat (User Query)
+    Note over APIM: Apply Rate Limit & Cache Lookup
+    APIM->>PF: Forward Secure Request
+    PF->>Search: Vector Search (Private Docs)
+    Search-->>PF: Return Relevant Context
+    
+    alt Context Found
+        PF->>LLM: Augmented Prompt (Context + Query)
+        LLM-->>PF: Grounded Response
+    else No Relevant Docs
+        PF-->>PF: Trigger "Strict Grounding" Guardrail
+        PF-->>APIM: "I can only answer from private docs."
+    end
+
+    PF-->>APIM: Return JSON Response
+    Note over APIM: Log Transaction & Update Cache
+    APIM-->>User: Secured AI Response
+
 🛠️ Deployment & Implementation Guide
 This guide outlines the end-to-end setup of the Secure RAG Orchestrator, from infrastructure provisioning to Zero-Trust IAM configuration and API Gateway integration.
 1. Core Infrastructure Provisioning
