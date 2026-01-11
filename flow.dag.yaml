@@ -1,0 +1,66 @@
+id: template_chat_flow
+name: Template Chat Flow
+inputs:
+  chat_history:
+    type: list
+    is_chat_input: false
+    is_chat_history: true
+  question:
+    type: string
+    is_chat_input: true
+outputs:
+  answer:
+    type: string
+    reference: ${final_response.output}
+    is_chat_output: true
+nodes:
+- name: search_docs
+  type: python
+  source:
+    type: code
+    path: search_docs.py
+  inputs:
+    conn: AzureAISearchConn
+    question: ${inputs.question}
+  use_variants: false
+- name: off_topic_guard
+  type: python
+  source:
+    type: code
+    path: off_topic_guard.py
+  inputs:
+    has_context: ${search_docs.output.has_context}
+  use_variants: false
+- name: LLM_Node
+  type: llm
+  source:
+    type: code
+    path: LLM_Node.jinja2
+  inputs:
+    deployment_name: XXX-gpt4o-model
+    temperature: 0.3
+    top_p: 1
+    max_tokens: 1000
+    chat_history: ${inputs.chat_history}
+    context: ${search_docs.output.context}
+    question: ${inputs.question}
+  provider: AzureOpenAI
+  connection: XXX-ai-hub-foundry-resource_aoai
+  api: chat
+  module: promptflow.tools.aoai
+  activate:
+    when: ${off_topic_guard.output}
+    is: true
+  use_variants: false
+- name: final_response
+  type: python
+  source:
+    type: code
+    path: final_response.py
+  inputs:
+    has_context: ${search_docs.output.has_context}
+    llm_output: ${LLM_Node.output}
+  use_variants: false
+node_variants: {}
+environment:
+  python_requirements_txt: requirements.txt
