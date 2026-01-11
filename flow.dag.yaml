@@ -37,7 +37,7 @@ nodes:
     type: code
     path: LLM_Node.jinja2
   inputs:
-    deployment_name: gpt4o
+    deployment_name: gpt-4o
     temperature: 0.3
     top_p: 1
     max_tokens: 1000
